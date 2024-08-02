@@ -60,7 +60,7 @@ class DBManager:
         cur.execute('DROP TABLE IF EXISTS employers;'
                     'CREATE TABLE employers'
                     '('
-                    'id SMALLINT PRIMARY KEY,'
+                    'id INT PRIMARY KEY,'
                     'name VARCHAR(100),'
                     'alternate_url VARCHAR(100),'
                     'vacancies_url VARCHAR(100),'
@@ -74,12 +74,25 @@ class DBManager:
         """Заполняет таблицу employers, на вход принимает список словарей."""
         conn, cur = self.__connect_to_coursework_5()
 
-        table_columns = 'id, name, alternate_url, vacancies_url, open_vacancies'
+        table_columns = 'id', 'name', 'alternate_url', 'vacancies_url', 'open_vacancies'
 
-        for item in values_list:
-            query = f'INSERT INTO employers ({table_columns}) VALUES ({', '.join(['%s'] * len(item.values() - 2))})'
-            cur.execute(query, item.values())
+        for item_dict in values_list:
+            query = f'INSERT INTO employers VALUES ({', '.join(['%s'] * len(table_columns))})'
+            item = [*item_dict.values()]
+            value = [*item[:2], item[3], *item[5:]]
+            cur.execute(query, value)
         conn.commit()
         cur.close()
         conn.close()
         print(f'Данные успешно загружены в таблицу employers')
+
+    def select_from_table(self, columns, table_name):
+        conn, cur = self.__connect_to_coursework_5()
+
+        result = cur.execute(f'SELECT {columns} FROM {table_name}')
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return result
