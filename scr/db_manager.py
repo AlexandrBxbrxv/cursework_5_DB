@@ -61,7 +61,7 @@ class DBManager:
                     'CREATE TABLE employers'
                     '('
                     'id INT PRIMARY KEY,'
-                    'name VARCHAR(100),'
+                    'name VARCHAR(200),'
                     'alternate_url VARCHAR(100),'
                     'vacancies_url VARCHAR(100),'
                     'open_vacancies SMALLINT'
@@ -87,9 +87,12 @@ class DBManager:
         print(f'Данные успешно загружены в таблицу employers')
 
     def select_from_table(self, columns, table_name):
+        """Возвращает выбранные колонки указанной таблицы.
+        Выбор как в sql * или название колонок через запятую"""
         conn, cur = self.__connect_to_coursework_5()
 
-        result = cur.execute(f'SELECT {columns} FROM {table_name}')
+        cur.execute(f'SELECT {columns} FROM {table_name};')
+        result = cur.fetchall()
 
         conn.commit()
         cur.close()
