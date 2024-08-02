@@ -27,6 +27,7 @@ class DBManager:
 
     def __create_database_coursework_5(self):
         """Создает базу данных coursework_5"""
+        print('Создаём базу данных coursework_5')
         conn = psycopg2.connect(
             user=self.user,
             password=self.password,
@@ -60,7 +61,7 @@ class DBManager:
         cur.execute('DROP TABLE IF EXISTS employers;'
                     'CREATE TABLE employers'
                     '('
-                    'id INT PRIMARY KEY,'
+                    'employer_id INT PRIMARY KEY,'
                     'name VARCHAR(200),'
                     'alternate_url VARCHAR(100),'
                     'vacancies_url VARCHAR(100),'
@@ -70,13 +71,30 @@ class DBManager:
         cur.close()
         conn.close()
 
-    def insert_into_table_employers(self, values_list):
+    def create_table_vacancies(self):
+        """Создает таблицу vacancies"""
+        conn, cur = self.__connect_to_coursework_5()
+        cur.execute('DROP TABLE IF EXISTS vacancies;'
+                    'CREATE TABLE vacancies'
+                    '('
+                    'employer_id INT,'
+                    'vacancy_id INT PRIMARY KEY,'
+                    'name TEXT,'
+                    'pay INT,'
+                    'alternate_url VARCHAR(100),'
+                    'FOREIGN KEY (employer_id) REFERENCES employers(employer_id)'
+                    ');')
+        conn.commit()
+        cur.close()
+        conn.close()
+
+    def insert_into_table_employers(self, dicts_list):
         """Заполняет таблицу employers, на вход принимает список словарей."""
         conn, cur = self.__connect_to_coursework_5()
 
-        table_columns = 'id', 'name', 'alternate_url', 'vacancies_url', 'open_vacancies'
+        table_columns = 'employer_id', 'name', 'alternate_url', 'vacancies_url', 'open_vacancies'
 
-        for item_dict in values_list:
+        for item_dict in dicts_list:
             query = f'INSERT INTO employers VALUES ({', '.join(['%s'] * len(table_columns))})'
             item = [*item_dict.values()]
             value = [*item[:2], item[3], *item[5:]]
@@ -85,6 +103,20 @@ class DBManager:
         cur.close()
         conn.close()
         print(f'Данные успешно загружены в таблицу employers')
+
+    def insert_into_table_vacancies(self, values_list):
+        """Заполняет таблицу vacancies, на вход принимает список словарей."""
+        conn, cur = self.__connect_to_coursework_5()
+
+        table_columns = 'employer_id', 'vacancy_id', 'name', 'pay', 'alternate_url'
+
+        for value in values_list:
+            query = f'INSERT INTO employers VALUES ({', '.join(['%s'] * len(table_columns))})'
+            cur.execute(query, value)
+        conn.commit()
+        cur.close()
+        conn.close()
+        print(f'Данные успешно загружены в таблицу vacancies')
 
     def select_from_table(self, columns, table_name):
         """Возвращает выбранные колонки указанной таблицы.
