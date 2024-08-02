@@ -27,10 +27,3 @@ class HHapiEmployers:
 
         sorted_result = sorted(result, key=lambda x: x['open_vacancies'], reverse=True)
         return sorted_result[:number_of_employers]
-
-
-ld_emp = [{'id': '1721871', 'name': 'Programming Store', 'url': 'https://api.hh.ru/employers/1721871', 'alternate_url': 'https://hh.ru/employer/1721871', 'logo_urls': {'original': 'https://img.hhcdn.ru/employer-logo-original/1301046.png', '240': 'https://img.hhcdn.ru/employer-logo/6824447.png', '90': 'https://img.hhcdn.ru/employer-logo/6824446.png'}, 'vacancies_url': 'https://api.hh.ru/vacancies?employer_id=1721871', 'open_vacancies': 39}, {'id': '3518049', 'name': 'Школа программирования и робототехники Пиксель', 'url': 'https://api.hh.ru/employers/3518049', 'alternate_url': 'https://hh.ru/employer/3518049', 'logo_urls': {'original': 'https://img.hhcdn.ru/employer-logo-original/891581.png', '240': 'https://img.hhcdn.ru/employer-logo/4007012.png', '90': 'https://img.hhcdn.ru/employer-logo/4007011.png'}, 'vacancies_url': 'https://api.hh.ru/vacancies?employer_id=3518049', 'open_vacancies': 38}]
-
-table_columns = ld_emp[0].keys()
-
-print(*ld_emp[0].keys())
