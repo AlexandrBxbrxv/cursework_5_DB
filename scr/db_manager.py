@@ -61,7 +61,7 @@ class DBManager:
         cur.execute('DROP TABLE IF EXISTS employers;'
                     'CREATE TABLE employers'
                     '('
-                    'employer_id INT PRIMARY KEY,'
+                    'employer_id VARCHAR(20) PRIMARY KEY,'
                     'name VARCHAR(200),'
                     'alternate_url VARCHAR(100),'
                     'vacancies_url VARCHAR(100),'
@@ -77,11 +77,11 @@ class DBManager:
         cur.execute('DROP TABLE IF EXISTS vacancies;'
                     'CREATE TABLE vacancies'
                     '('
-                    'employer_id INT,'
-                    'vacancy_id INT PRIMARY KEY,'
+                    'employer_id VARCHAR(20),'
+                    'vacancy_id VARCHAR(20) PRIMARY KEY,'
                     'name TEXT,'
                     'pay INT,'
-                    'alternate_url VARCHAR(100),'
+                    'alternate_url VARCHAR(200),'
                     'FOREIGN KEY (employer_id) REFERENCES employers(employer_id)'
                     ');')
         conn.commit()
@@ -92,10 +92,10 @@ class DBManager:
         """Заполняет таблицу employers, на вход принимает список словарей."""
         conn, cur = self.__connect_to_coursework_5()
 
-        table_columns = 'employer_id', 'name', 'alternate_url', 'vacancies_url', 'open_vacancies'
+        table_columns = 'employer_id, name, alternate_url, vacancies_url, open_vacancies'
 
         for item_dict in dicts_list:
-            query = f'INSERT INTO employers VALUES ({', '.join(['%s'] * len(table_columns))})'
+            query = f'INSERT INTO employers ({table_columns}) VALUES ({', '.join(['%s'] * 5)});'
             item = [*item_dict.values()]
             value = [*item[:2], item[3], *item[5:]]
             cur.execute(query, value)
@@ -108,10 +108,10 @@ class DBManager:
         """Заполняет таблицу vacancies, на вход принимает список словарей."""
         conn, cur = self.__connect_to_coursework_5()
 
-        table_columns = 'employer_id', 'vacancy_id', 'name', 'pay', 'alternate_url'
+        table_columns = 'employer_id, vacancy_id, name, pay, alternate_url'
 
         for value in values_list:
-            query = f'INSERT INTO employers VALUES ({', '.join(['%s'] * len(table_columns))})'
+            query = f'INSERT INTO vacancies ({table_columns}) VALUES ({', '.join(['%s'] * 5)});'
             cur.execute(query, value)
         conn.commit()
         cur.close()
