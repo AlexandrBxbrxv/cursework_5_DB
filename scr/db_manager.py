@@ -93,6 +93,7 @@ class DBManager:
             item = [*item_dict.values()]
             value = [*item[:2], item[3], *item[5:]]
             cur.execute(query, value)
+
         conn.commit()
         cur.close()
         conn.close()
@@ -107,6 +108,7 @@ class DBManager:
         for value in values_list:
             query = f'INSERT INTO vacancies ({table_columns}) VALUES ({', '.join(['%s'] * 5)});'
             cur.execute(query, value)
+
         conn.commit()
         cur.close()
         conn.close()
@@ -123,5 +125,19 @@ class DBManager:
         conn.commit()
         cur.close()
         conn.close()
+        return result
 
+    def get_all_vacancies(self) -> list:
+        """Возвращает список всех вакансий с колонками:
+        названия компании, названия вакансии, зарплаты, ссылки на вакансию"""
+        conn, cur = self.__connect_to_coursework_5()
+
+        cur.execute('SELECT employers.name, vacancies.name, vacancies.pay, vacancies.alternate_url'
+                    'FROM vacancies'
+                    'INNER JOIN employers USING(employer_id);')
+        result = cur.fetchall()
+
+        conn.commit()
+        cur.close()
+        conn.close()
         return result
