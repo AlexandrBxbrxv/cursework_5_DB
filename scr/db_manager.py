@@ -112,7 +112,7 @@ class DBManager:
         conn.close()
         print(f'Данные успешно загружены в таблицу vacancies')
 
-    def __fetch_all(self, query) -> list:
+    def __fetch_all(self, query: str) -> list:
         """Метод для сокращения одинаковых функций,
         возвращает список из базы данных по запросу query"""
         conn, cur = self.__connect_to_coursework_5()
@@ -158,4 +158,10 @@ class DBManager:
                  'INNER JOIN vacancies USING(employer_id)'
                  'GROUP BY employers.name'
                  'ORDER BY vacancies_amount DESC;')
+        return self.__fetch_all(query)
+
+    def get_avg_salary(self) -> list:
+        """Возвращает среднюю зарплату по вакансиям"""
+
+        query = 'SELECT AVG(pay) FROM vacancies;'
         return self.__fetch_all(query)
