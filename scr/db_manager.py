@@ -112,7 +112,7 @@ class DBManager:
         conn.close()
         print(f'Данные успешно загружены в таблицу vacancies')
 
-    def __fetch_all(self, query: str) -> list:
+    def __fetch_all(self, query: str):
         """Метод для сокращения одинаковых функций,
         возвращает список из базы данных по запросу query"""
         conn, cur = self.__connect_to_coursework_5()
@@ -160,8 +160,15 @@ class DBManager:
                  'ORDER BY vacancies_amount DESC;')
         return self.__fetch_all(query)
 
-    def get_avg_salary(self) -> list:
+    def get_avg_salary(self) -> float:
         """Возвращает среднюю зарплату по вакансиям"""
 
         query = 'SELECT AVG(pay) FROM vacancies;'
+        return self.__fetch_all(query)
+
+    def get_vacancies_with_higher_salary(self) -> list:
+        """Возвращает список всех вакансий, зарплата которых выше средней по всем вакансиям"""
+
+        query = (f'SELECT * FROM vacancies'
+                 f'WHERE pay > {round(self.get_avg_salary())}')
         return self.__fetch_all(query)
