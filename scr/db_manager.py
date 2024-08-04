@@ -139,3 +139,19 @@ class DBManager:
         cur.close()
         conn.close()
         return result
+
+    def get_vacancies_with_keyword(self, keyword: str) -> list:
+        """Возвращает список всех вакансий,
+        в названии которых содержатся переданные в метод слова"""
+
+        conn, cur = self.__connect_to_coursework_5()
+
+        cur.execute(f'SELECT *' 
+                    f'FROM vacancies'
+                    f'WHERE name LIKE "%{keyword}%";')
+        result = cur.fetchall()
+
+        conn.commit()
+        cur.close()
+        conn.close()
+        return result
