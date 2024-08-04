@@ -112,61 +112,50 @@ class DBManager:
         conn.close()
         print(f'Данные успешно загружены в таблицу vacancies')
 
-    def select_from_table(self, columns: str, table_name: str) -> list:
-        """Возвращает выбранные колонки указанной таблицы.
-        Выбор как в sql * или название колонок через запятую"""
+    def __fetch_all(self, query) -> list:
+        """Метод для сокращения одинаковых функций,
+        возвращает список из базы данных по запросу query"""
         conn, cur = self.__connect_to_coursework_5()
 
-        cur.execute(f'SELECT {columns} FROM {table_name};')
+        cur.execute(query)
         result = cur.fetchall()
 
         conn.commit()
         cur.close()
         conn.close()
         return result
+
+    def select_from_table(self, columns: str, table_name: str) -> list:
+        """Возвращает выбранные колонки указанной таблицы.
+        Выбор как в sql * или название колонок через запятую"""
+
+        query = f'SELECT {columns} FROM {table_name};'
+        return self.__fetch_all(query)
 
     def get_all_vacancies(self) -> list:
         """Возвращает список всех вакансий с колонками:
         названия компании, названия вакансии, зарплаты, ссылки на вакансию"""
-        conn, cur = self.__connect_to_coursework_5()
 
-        cur.execute('SELECT employers.name AS employer_name, vacancies.name, vacancies.pay, vacancies.alternate_url'
-                    'FROM vacancies'
-                    'INNER JOIN employers USING(employer_id);')
-        result = cur.fetchall()
-
-        conn.commit()
-        cur.close()
-        conn.close()
-        return result
+        query = ('SELECT employers.name AS employer_name, vacancies.name, vacancies.pay, vacancies.alternate_url'
+                 'FROM vacancies'
+                 'INNER JOIN employers USING(employer_id);')
+        return self.__fetch_all(query)
 
     def get_vacancies_with_keyword(self, keyword: str) -> list:
         """Возвращает список всех вакансий,
         в названии которых содержатся переданные в метод слова"""
-        conn, cur = self.__connect_to_coursework_5()
 
-        cur.execute(f'SELECT *' 
-                    f'FROM vacancies'
-                    f'WHERE name LIKE "%{keyword}%";')
-        result = cur.fetchall()
-
-        conn.commit()
-        cur.close()
-        conn.close()
-        return result
+        query = (f'SELECT *' 
+                 f'FROM vacancies'
+                 f'WHERE name LIKE "%{keyword}%";')
+        return self.__fetch_all(query)
 
     def get_companies_and_vacancies_count(self) -> list:
         """Возвращает список всех компаний и количество вакансий у каждой компании"""
-        conn, cur = self.__connect_to_coursework_5()
 
-        cur.execute('SELECT employers.name AS employer_name, COUNT(vacancies.name) AS vacancies_amount'
-                    'FROM employers'
-                    'INNER JOIN vacancies USING(employer_id)'
-                    'GROUP BY employers.name'
-                    'ORDER BY vacancies_amount DESC;')
-        result = cur.fetchall()
-
-        conn.commit()
-        cur.close()
-        conn.close()
-        return result
+        query = ('SELECT employers.name AS employer_name, COUNT(vacancies.name) AS vacancies_amount'
+                 'FROM employers'
+                 'INNER JOIN vacancies USING(employer_id)'
+                 'GROUP BY employers.name'
+                 'ORDER BY vacancies_amount DESC;')
+        return self.__fetch_all(query)
