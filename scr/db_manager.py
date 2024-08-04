@@ -130,7 +130,7 @@ class DBManager:
         названия компании, названия вакансии, зарплаты, ссылки на вакансию"""
         conn, cur = self.__connect_to_coursework_5()
 
-        cur.execute('SELECT employers.name, vacancies.name, vacancies.pay, vacancies.alternate_url'
+        cur.execute('SELECT employers.name AS employer_name, vacancies.name, vacancies.pay, vacancies.alternate_url'
                     'FROM vacancies'
                     'INNER JOIN employers USING(employer_id);')
         result = cur.fetchall()
@@ -143,12 +143,27 @@ class DBManager:
     def get_vacancies_with_keyword(self, keyword: str) -> list:
         """Возвращает список всех вакансий,
         в названии которых содержатся переданные в метод слова"""
-
         conn, cur = self.__connect_to_coursework_5()
 
         cur.execute(f'SELECT *' 
                     f'FROM vacancies'
                     f'WHERE name LIKE "%{keyword}%";')
+        result = cur.fetchall()
+
+        conn.commit()
+        cur.close()
+        conn.close()
+        return result
+
+    def get_companies_and_vacancies_count(self) -> list:
+        """Возвращает список всех компаний и количество вакансий у каждой компании"""
+        conn, cur = self.__connect_to_coursework_5()
+
+        cur.execute('SELECT employers.name AS employer_name, COUNT(vacancies.name) AS vacancies_amount'
+                    'FROM employers'
+                    'INNER JOIN vacancies USING(employer_id)'
+                    'GROUP BY employers.name'
+                    'ORDER BY vacancies_amount DESC;')
         result = cur.fetchall()
 
         conn.commit()
