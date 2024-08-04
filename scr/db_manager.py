@@ -58,7 +58,6 @@ class DBManager:
                     'employer_id VARCHAR(20) PRIMARY KEY,'
                     'name VARCHAR(200),'
                     'alternate_url VARCHAR(100),'
-                    'vacancies_url VARCHAR(100),'
                     'open_vacancies SMALLINT'
                     ');')
         conn.commit()
@@ -86,13 +85,12 @@ class DBManager:
         """Заполняет таблицу employers, на вход принимает список словарей."""
         conn, cur = self.__connect_to_coursework_5()
 
-        table_columns = 'employer_id, name, alternate_url, vacancies_url, open_vacancies'
+        table_columns = 'employer_id, name, alternate_url, open_vacancies'
 
-        for item_dict in dicts_list:
-            query = f'INSERT INTO employers ({table_columns}) VALUES ({', '.join(['%s'] * 5)});'
-            item = [*item_dict.values()]
-            value = [*item[:2], item[3], *item[5:]]
-            cur.execute(query, value)
+        for item in dicts_list:
+            query = f'INSERT INTO employers ({table_columns}) VALUES ({', '.join(['%s'] * 4)});'
+            values = [item['id'], item['name'], item['alternate_url'], item['open_vacancies']]
+            cur.execute(query, values)
 
         conn.commit()
         cur.close()
