@@ -2,12 +2,15 @@ import requests
 
 
 class HHapiVacancies:
+    """Класс для работы с API hh.ru"""
     def __init__(self):
 
         self.__headers = {'User-Agent': 'HH-User-Agent'}
         self.__vacancies = []
 
-    def load_vacancies(self, employers):
+    def load_vacancies(self, employers: list) -> list:
+        """Загружает вакансии по ссылке вакансий работодателя,
+        принимает список работодателей, возвращает список вакансий"""
         print('Получаем вакансии...')
         for item in employers:
             url_vacancies = item['vacancies_url']

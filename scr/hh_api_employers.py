@@ -2,7 +2,8 @@ import requests
 
 
 class HHapiEmployers:
-    """Находит работодателей по запросу 'Программирование'"""
+    """Класс для работы с API hh.ru.
+    Находит работодателей по запросу 'Программирование'"""
 
     def __init__(self):
         self.__url = 'https://api.hh.ru/employers'
@@ -10,7 +11,7 @@ class HHapiEmployers:
         self.__params = {'text': 'Программирование', 'page': 0, 'per_page': 20}
         self.__employers = []
 
-    def load_employers(self, number_of_employers: int):
+    def load_employers(self, number_of_employers: int) -> list:
         """Выбирает указанное количество работодателей,
            количество активных вакансий которых больше 0"""
         print('Выбираем работодателей...')

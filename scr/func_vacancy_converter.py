@@ -1,7 +1,7 @@
-def convert_vacancies_to_lists(employers_vacancies):
+def convert_vacancies_to_lists(employers_vacancies: list) -> list:
     """Собирает основные значения вакансии,
      выбирает только то вакансии в которых указана минимальная зарплата в рублях"""
-    vacancies_values = []
+    vacancies_values_list = []
     for employer_vacancies in employers_vacancies:
         for vacancy in employer_vacancies:
             employer = vacancy.get('employer')
@@ -17,5 +17,5 @@ def convert_vacancies_to_lists(employers_vacancies):
                     pay,
                     vacancy.get('alternate_url')
                 ]
-                vacancies_values.append(vacancy_values)
-    return vacancies_values
+                vacancies_values_list.append(vacancy_values)
+    return vacancies_values_list
