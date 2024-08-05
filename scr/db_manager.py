@@ -21,7 +21,7 @@ class DBManager:
 
     def __create_database_coursework_5(self):
         """Создает базу данных coursework_5"""
-        print('Создаём базу данных coursework_5')
+        print('Пытаемся зайти в базу данных...')
         conn = psycopg2.connect(
             user=self.user,
             password=self.password,
@@ -136,8 +136,8 @@ class DBManager:
         """Возвращает список всех вакансий с колонками:
         названия компании, названия вакансии, зарплаты, ссылки на вакансию"""
 
-        query = ('SELECT employers.name AS employer_name, vacancies.name, vacancies.pay, vacancies.alternate_url'
-                 'FROM vacancies'
+        query = ('SELECT employers.name AS employer_name, vacancies.name, vacancies.pay, vacancies.alternate_url '
+                 'FROM vacancies '
                  'INNER JOIN employers USING(employer_id);')
         return self.__fetch_all(query)
 
@@ -145,30 +145,28 @@ class DBManager:
         """Возвращает список всех вакансий,
         в названии которых содержатся переданные в метод слова"""
 
-        query = (f'SELECT *' 
-                 f'FROM vacancies'
-                 f'WHERE name LIKE "%{keyword}%";')
+        query = f"SELECT * FROM vacancies WHERE vacancies.name LIKE '%{keyword}%';"
         return self.__fetch_all(query)
 
     def get_companies_and_vacancies_count(self) -> list:
         """Возвращает список всех компаний и количество вакансий у каждой компании"""
 
-        query = ('SELECT employers.name AS employer_name, COUNT(vacancies.name) AS vacancies_amount'
-                 'FROM employers'
-                 'INNER JOIN vacancies USING(employer_id)'
-                 'GROUP BY employers.name'
+        query = ('SELECT employers.name AS employer_name, COUNT(vacancies.name) AS vacancies_amount '
+                 'FROM employers '
+                 'INNER JOIN vacancies USING(employer_id) '
+                 'GROUP BY employers.name '
                  'ORDER BY vacancies_amount DESC;')
         return self.__fetch_all(query)
 
-    def get_avg_salary(self) -> float:
+    def get_avg_salary(self) -> int:
         """Возвращает среднюю зарплату по вакансиям"""
 
         query = 'SELECT AVG(pay) FROM vacancies;'
-        return self.__fetch_all(query)
+        return round(self.__fetch_all(query)[0][0])
 
     def get_vacancies_with_higher_salary(self) -> list:
         """Возвращает список всех вакансий, зарплата которых выше средней по всем вакансиям"""
 
-        query = (f'SELECT * FROM vacancies'
-                 f'WHERE pay > {round(self.get_avg_salary())}')
+        query = (f'SELECT * FROM vacancies '
+                 f'WHERE pay > {self.get_avg_salary()}')
         return self.__fetch_all(query)
