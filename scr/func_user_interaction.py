@@ -1,7 +1,7 @@
 from scr.db_manager import DBManager
 from scr.hh_api_employers import HHapiEmployers
 from scr.hh_api_vacancies import HHapiVacancies
-from scr.func_vacancy_converter import *
+from scr.func_vacancy_converter import convert_vacancies_to_lists
 
 
 def generate_and_fill_tables(db):
@@ -23,6 +23,8 @@ def generate_and_fill_tables(db):
 
 def print_table(table: list):
     """Печатает в консоль содержимое таблицы"""
+    print(f'-\nДлинна списка: {len(table)}'
+          f'\n')
     for row in table:
         print(row)
 
@@ -30,16 +32,23 @@ def print_table(table: list):
 def user_interaction():
     """Для взаимодействия пользователя с программой"""
     user_input = ''
-    if user_input == 'stop':
-        exit()
-    while user_input not in ('1', '2'):
+    is_authorized = False
 
-        user_input = input('Запускаем базу данных\n'
+    while not is_authorized:
+        if user_input == 'stop':
+            exit()
+        user_input = input('-\nАвторизуйтесь в базе данных\n'
                            '1 - Зайти под стандартным пользователем\n'
                            '2 - Ввести пользователя\n')
         if user_input == '1':
             password = input('Пароль: ') #  'h3K7_f6JH#9oK1U9'
-            db = DBManager(password)
+            try:
+                db = DBManager(password)
+                print('Создана база данных coursework_5')
+                is_authorized = True
+            except Exception:
+                print('Не верный пароль')
+
         if user_input == '2':
             password = input('Пароль: ')
             user = input('Пользователь: ')
@@ -47,20 +56,34 @@ def user_interaction():
             host = input('Хост: ')
             try:
                 db = DBManager(password, user, port, host)
+                print('Создана база данных coursework_5')
+                is_authorized = True
             except Exception:
                 print('Что-то введено не правильно')
 
+    generate_and_fill_tables(db)
+
     while user_input != 'stop':
-        generate_and_fill_tables(db)
-        print('Работа с базой данных\n'
-              '1 - \n'
-              '\n'
-              '\n'
-              '\n'
-              '\n')
+
+        user_input = input('-\nРабота с базой данных\n'
+                           '1 - Список всех компаний и количество вакансий у каждой компании\n'
+                           '2 - Все вакансии\n'
+                           '3 - Средняя зарплата по вакансиям\n'
+                           '4 - Вакансии, зарплата которых выше средней по всем вакансиям\n'
+                           '5 - Вакансии, в названии которых содержатся переданные слова\n')
+
+        if user_input == '1':
+            print_table(db.get_companies_and_vacancies_count())
+        if user_input == '2':
+            print_table(db.get_all_vacancies())
+        if user_input == '3':
+            print(f'{db.get_avg_salary()} рублей')
+        if user_input == '4':
+            print_table(db.get_vacancies_with_higher_salary())
+        if user_input == '5':
+            user_word = input()
+            print_table(db.get_vacancies_with_keyword(user_word))
+
 
 if __name__ == '__main__':
-    pass
-
-
-
+    user_interaction()
