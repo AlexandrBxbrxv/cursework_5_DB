@@ -81,7 +81,7 @@ class DBManager:
         cur.close()
         conn.close()
 
-    def insert_into_table_employers(self, dicts_list: list):
+    def insert_into_table_employers(self, dicts_list: list[dict]):
         """Заполняет таблицу employers, на вход принимает список словарей."""
         conn, cur = self.__connect_to_coursework_5()
 
@@ -97,7 +97,7 @@ class DBManager:
         conn.close()
         print(f'Данные успешно загружены в таблицу employers')
 
-    def insert_into_table_vacancies(self, values_list: list):
+    def insert_into_table_vacancies(self, values_list: list[list]):
         """Заполняет таблицу vacancies, на вход принимает список значений."""
         conn, cur = self.__connect_to_coursework_5()
 

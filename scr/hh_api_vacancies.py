@@ -8,7 +8,7 @@ class HHapiVacancies:
         self.__headers = {'User-Agent': 'HH-User-Agent'}
         self.__vacancies = []
 
-    def load_vacancies(self, employers: list) -> list:
+    def load_vacancies(self, employers: list) -> list[dict]:
         """Загружает вакансии по ссылке вакансий работодателя,
         принимает список работодателей, возвращает список вакансий"""
         print('Получаем вакансии...')

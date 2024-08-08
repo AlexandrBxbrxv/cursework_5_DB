@@ -11,7 +11,7 @@ class HHapiEmployers:
         self.__params = {'text': 'Программирование', 'page': 0, 'per_page': 20}
         self.__employers = []
 
-    def load_employers(self, number_of_employers: int) -> list:
+    def load_employers(self, number_of_employers: int) -> list[dict]:
         """Выбирает указанное количество работодателей,
            количество активных вакансий которых больше 0"""
         print('Выбираем работодателей...')

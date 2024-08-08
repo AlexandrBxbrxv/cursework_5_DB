@@ -1,4 +1,4 @@
-def convert_vacancies_to_lists(employers_vacancies: list) -> list:
+def convert_vacancies_to_lists(employers_vacancies: list) -> list[list]:
     """Собирает основные значения вакансии,
      выбирает только то вакансии в которых указана минимальная зарплата в рублях"""
     vacancies_values_list = []
