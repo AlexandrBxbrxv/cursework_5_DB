@@ -16,6 +16,6 @@ class HHapiVacancies:
             url_vacancies = item['vacancies_url']
             response = requests.get(url_vacancies, headers=self.__headers)
             data = response.json()['items']
-            self.__vacancies.append(data)
+            self.__vacancies.extend(data)
 
         return self.__vacancies
