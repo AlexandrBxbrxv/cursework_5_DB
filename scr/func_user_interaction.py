@@ -1,7 +1,7 @@
 from scr.db_manager import DBManager
 from scr.hh_api_employers import HHapiEmployers
 from scr.hh_api_vacancies import HHapiVacancies
-from scr.func_vacancy_converter import convert_vacancies_to_lists
+from scr.func_converters import *
 
 
 def generate_and_fill_tables(db):
@@ -9,16 +9,14 @@ def generate_and_fill_tables(db):
     hh_emp = HHapiEmployers()
     hh_vac = HHapiVacancies()
 
-    employers = hh_emp.load_employers(15)
-    employers_vacancies = hh_vac.load_vacancies(employers)
+    employers = hh_emp.load_employers(10)
+    vacancies = hh_vac.load_vacancies(employers)
 
     db.create_table_employers()
-    db.insert_into_table_employers(employers)
-
-    vacancies_list = convert_vacancies_to_lists(employers_vacancies)
+    db.fill_table(convert_employers_to_lists(employers))
 
     db.create_table_vacancies()
-    db.insert_into_table_vacancies(vacancies_list)
+    db.fill_table(convert_vacancies_to_lists(vacancies))
 
 
 def print_table(table: list):
@@ -85,7 +83,3 @@ def user_interaction():
         if user_input == '5':
             user_word = input()
             print_table(db.get_vacancies_with_keyword(user_word))
-
-
-if __name__ == '__main__':
-    user_interaction()
