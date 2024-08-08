@@ -97,37 +97,6 @@ class DBManager:
         conn.close()
         return result
 
-    def insert_into_table_employers(self, dicts_list: list[dict]):
-        """Заполняет таблицу employers, на вход принимает список словарей."""
-        conn, cur = self.__connect_to_coursework_5()
-
-        table_columns = 'employer_id, name, alternate_url, open_vacancies'
-
-        for item in dicts_list:
-            query = f'INSERT INTO employers ({table_columns}) VALUES ({', '.join(['%s'] * 4)});'
-            values = [item['id'], item['name'], item['alternate_url'], item['open_vacancies']]
-            cur.execute(query, values)
-
-        conn.commit()
-        cur.close()
-        conn.close()
-        print(f'Данные успешно загружены в таблицу employers')
-
-    def insert_into_table_vacancies(self, values_list: list[list]):
-        """Заполняет таблицу vacancies, на вход принимает список значений."""
-        conn, cur = self.__connect_to_coursework_5()
-
-        table_columns = 'employer_id, vacancy_id, name, pay, alternate_url'
-
-        for value in values_list:
-            query = f'INSERT INTO vacancies ({table_columns}) VALUES ({', '.join(['%s'] * 5)});'
-            cur.execute(query, value)
-
-        conn.commit()
-        cur.close()
-        conn.close()
-        print(f'Данные успешно загружены в таблицу vacancies')
-
     def fill_table(self, table_name: str, values_list: list[list]):
         """Заполняет таблицу в БД coursework_5, на вход принимает название таблицы и список списков_значений,
          первой строкой списка должен быть список названий колонок таблицы."""
@@ -143,13 +112,6 @@ class DBManager:
         cur.close()
         conn.close()
         print(f'Данные успешно загружены в таблицу {table_name}')
-
-    def select_from_table(self, columns: str, table_name: str) -> list:
-        """Возвращает выбранные колонки указанной таблицы.
-        Выбор как в sql * или название колонок через запятую"""
-
-        query = f'SELECT {columns} FROM {table_name};'
-        return self.__fetch_all(query)
 
     def get_all_vacancies(self) -> list:
         """Возвращает список всех вакансий с колонками:
