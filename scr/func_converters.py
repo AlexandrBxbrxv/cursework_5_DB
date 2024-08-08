@@ -1,5 +1,22 @@
+def convert_employers_to_lists(employers: list) -> list[list]:
+    """Собирает табличные значения работодателя,
+     первая[0] строчка - название колонок таблицы"""
+    employers_values_list = []
+    header = ['employer_id', 'name', 'alternate_url', 'open_vacancies']
+    employers_values_list.append(header)
+    for employer in employers:
+        employers_values = [
+            employer['id'],
+            employer['name'],
+            employer['alternate_url'],
+            employer['open_vacancies']
+        ]
+        employers_values_list.append(employers_values)
+    return employers_values_list
+
+
 def convert_vacancies_to_lists(employers_vacancies: list) -> list[list]:
-    """Собирает основные значения вакансии,
+    """Собирает табличные значения вакансии,
      выбирает только то вакансии в которых указана минимальная зарплата в рублях,
      первая[0] строчка - название колонок таблицы"""
     vacancies_values_list = []
