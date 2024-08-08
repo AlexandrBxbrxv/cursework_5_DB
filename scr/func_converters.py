@@ -1,4 +1,4 @@
-def convert_employers_to_lists(employers: list) -> list[list]:
+def convert_employers_to_lists(employers: list[dict]) -> list[list]:
     """Собирает табличные значения работодателя,
      первая[0] строчка - название колонок таблицы"""
     employers_values_list = []
@@ -15,7 +15,7 @@ def convert_employers_to_lists(employers: list) -> list[list]:
     return employers_values_list
 
 
-def convert_vacancies_to_lists(employers_vacancies: list) -> list[list]:
+def convert_vacancies_to_lists(employers_vacancies: list[dict]) -> list[list]:
     """Собирает табличные значения вакансии,
      выбирает только то вакансии в которых указана минимальная зарплата в рублях,
      первая[0] строчка - название колонок таблицы"""
