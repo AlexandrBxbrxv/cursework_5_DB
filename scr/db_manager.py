@@ -1,34 +1,6 @@
 import psycopg2
 
 
-def create_table_employers():
-    """Создает таблицу employers"""
-    query = ('DROP TABLE IF EXISTS employers;'
-             'CREATE TABLE employers'
-             '('
-             'employer_id VARCHAR(20) PRIMARY KEY,'
-             'name VARCHAR(200),'
-             'alternate_url VARCHAR(100),'
-             'open_vacancies SMALLINT'
-             ');')
-    return query
-
-
-def create_table_vacancies():
-    """Создает таблицу vacancies"""
-    query = ('DROP TABLE IF EXISTS vacancies;'
-             'CREATE TABLE vacancies'
-             '('
-             'employer_id VARCHAR(20),'
-             'vacancy_id VARCHAR(20) PRIMARY KEY,'
-             'name TEXT,'
-             'pay INT,'
-             'alternate_url VARCHAR(200),'
-             'FOREIGN KEY (employer_id) REFERENCES employers(employer_id)'
-             ');')
-    return query
-
-
 class DBManager:
     """Для создания и работы с базой данных coursework_5"""
     user: str
@@ -97,6 +69,32 @@ class DBManager:
         conn.close()
         return result
 
+    def create_table_employers(self):
+        """Создает таблицу employers"""
+        query = ('DROP TABLE IF EXISTS employers;'
+                 'CREATE TABLE employers'
+                 '('
+                 'employer_id VARCHAR(20) PRIMARY KEY,'
+                 'name VARCHAR(200),'
+                 'alternate_url VARCHAR(100),'
+                 'open_vacancies SMALLINT'
+                 ');')
+        self.__execute_query(query)
+
+    def create_table_vacancies(self):
+        """Создает таблицу vacancies"""
+        query = ('DROP TABLE IF EXISTS vacancies;'
+                 'CREATE TABLE vacancies'
+                 '('
+                 'employer_id VARCHAR(20),'
+                 'vacancy_id VARCHAR(20) PRIMARY KEY,'
+                 'name TEXT,'
+                 'pay INT,'
+                 'alternate_url VARCHAR(200),'
+                 'FOREIGN KEY (employer_id) REFERENCES employers(employer_id)'
+                 ');')
+        self.__execute_query(query)
+
     def fill_table(self, table_name: str, values_list: list[list]):
         """Заполняет таблицу в БД coursework_5, на вход принимает название таблицы и список списков_значений,
          первой строкой списка должен быть список названий колонок таблицы."""
@@ -112,6 +110,8 @@ class DBManager:
         cur.close()
         conn.close()
         print(f'Данные успешно загружены в таблицу {table_name}')
+
+    # Методы из задания для взаимодействия с пользователем
 
     def get_all_vacancies(self) -> list:
         """Возвращает список всех вакансий с колонками:
