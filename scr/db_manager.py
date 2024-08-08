@@ -112,6 +112,22 @@ class DBManager:
         conn.close()
         print(f'Данные успешно загружены в таблицу vacancies')
 
+    def fill_table(self, table_name: str, values_list: list[list]):
+        """Заполняет таблицу в БД coursework_5, на вход принимает название таблицы и список списков_значений,
+         первой строкой списка должен быть список названий колонок таблицы."""
+        conn, cur = self.__connect_to_coursework_5()
+
+        header = values_list[0]
+
+        for value in values_list[1:]:
+            query = f'INSERT INTO table_name ({", ".join(header)}) VALUES ({', '.join(['%s'] * len(header))});'
+            cur.execute(query, value)
+
+        conn.commit()
+        cur.close()
+        conn.close()
+        print(f'Данные успешно загружены в таблицу {table_name}')
+
     def __fetch_all(self, query: str):
         """Метод для сокращения одинаковых функций,
         возвращает список из базы данных по запросу query"""
