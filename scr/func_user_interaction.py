@@ -13,10 +13,10 @@ def generate_and_fill_tables(db):
     vacancies = hh_vac.load_vacancies(employers)
 
     db.create_table_employers()
-    db.fill_table(convert_employers_to_lists(employers))
+    db.fill_table('employers', convert_employers_to_lists(employers))
 
     db.create_table_vacancies()
-    db.fill_table(convert_vacancies_to_lists(vacancies))
+    db.fill_table('vacancies', convert_vacancies_to_lists(vacancies))
 
 
 def print_table(table: list):
