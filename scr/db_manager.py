@@ -1,6 +1,34 @@
 import psycopg2
 
 
+def create_table_employers():
+    """Создает таблицу employers"""
+    query = ('DROP TABLE IF EXISTS employers;'
+             'CREATE TABLE employers'
+             '('
+             'employer_id VARCHAR(20) PRIMARY KEY,'
+             'name VARCHAR(200),'
+             'alternate_url VARCHAR(100),'
+             'open_vacancies SMALLINT'
+             ');')
+    return query
+
+
+def create_table_vacancies():
+    """Создает таблицу vacancies"""
+    query = ('DROP TABLE IF EXISTS vacancies;'
+             'CREATE TABLE vacancies'
+             '('
+             'employer_id VARCHAR(20),'
+             'vacancy_id VARCHAR(20) PRIMARY KEY,'
+             'name TEXT,'
+             'pay INT,'
+             'alternate_url VARCHAR(200),'
+             'FOREIGN KEY (employer_id) REFERENCES employers(employer_id)'
+             ');')
+    return query
+
+
 class DBManager:
     """Для создания и работы с базой данных coursework_5"""
     user: str
@@ -49,37 +77,25 @@ class DBManager:
         )
         return conn, conn.cursor()
 
-    def create_table_employers(self):
-        """Создает таблицу employers"""
+    def __execute_query(self, query: str):
+        """Метод для сокращения одинаковых функций,
+        посылает в базу данных запрос query"""
         conn, cur = self.__connect_to_coursework_5()
-        cur.execute('DROP TABLE IF EXISTS employers;'
-                    'CREATE TABLE employers'
-                    '('
-                    'employer_id VARCHAR(20) PRIMARY KEY,'
-                    'name VARCHAR(200),'
-                    'alternate_url VARCHAR(100),'
-                    'open_vacancies SMALLINT'
-                    ');')
+        cur.execute(query)
         conn.commit()
         cur.close()
         conn.close()
 
-    def create_table_vacancies(self):
-        """Создает таблицу vacancies"""
+    def __fetch_all(self, query: str):
+        """Метод для сокращения одинаковых функций,
+        возвращает из базы данных результат запроса query"""
         conn, cur = self.__connect_to_coursework_5()
-        cur.execute('DROP TABLE IF EXISTS vacancies;'
-                    'CREATE TABLE vacancies'
-                    '('
-                    'employer_id VARCHAR(20),'
-                    'vacancy_id VARCHAR(20) PRIMARY KEY,'
-                    'name TEXT,'
-                    'pay INT,'
-                    'alternate_url VARCHAR(200),'
-                    'FOREIGN KEY (employer_id) REFERENCES employers(employer_id)'
-                    ');')
+        cur.execute(query)
+        result = cur.fetchall()
         conn.commit()
         cur.close()
         conn.close()
+        return result
 
     def insert_into_table_employers(self, dicts_list: list[dict]):
         """Заполняет таблицу employers, на вход принимает список словарей."""
@@ -127,19 +143,6 @@ class DBManager:
         cur.close()
         conn.close()
         print(f'Данные успешно загружены в таблицу {table_name}')
-
-    def __fetch_all(self, query: str):
-        """Метод для сокращения одинаковых функций,
-        возвращает список из базы данных по запросу query"""
-        conn, cur = self.__connect_to_coursework_5()
-
-        cur.execute(query)
-        result = cur.fetchall()
-
-        conn.commit()
-        cur.close()
-        conn.close()
-        return result
 
     def select_from_table(self, columns: str, table_name: str) -> list:
         """Возвращает выбранные колонки указанной таблицы.
