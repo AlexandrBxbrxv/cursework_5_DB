@@ -5,7 +5,7 @@ from scr.func_vacancy_converter import convert_vacancies_to_lists
 
 
 def generate_and_fill_tables(db):
-
+    """Поучает работодателей и их вакансии, создаёт соответствующие таблицы и заполняет их"""
     hh_emp = HHapiEmployers()
     hh_vac = HHapiVacancies()
 
@@ -41,7 +41,7 @@ def user_interaction():
                            '1 - Зайти под стандартным пользователем\n'
                            '2 - Ввести пользователя\n')
         if user_input == '1':
-            password = input('Пароль: ') #  'h3K7_f6JH#9oK1U9'
+            password = input('Пароль: ')
             try:
                 db = DBManager(password)
                 print('Создана база данных coursework_5')
