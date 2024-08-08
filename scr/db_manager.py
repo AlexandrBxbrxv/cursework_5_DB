@@ -103,7 +103,7 @@ class DBManager:
         header = values_list[0]
 
         for value in values_list[1:]:
-            query = f'INSERT INTO table_name ({", ".join(header)}) VALUES ({', '.join(['%s'] * len(header))});'
+            query = f'INSERT INTO {table_name} ({", ".join(header)}) VALUES ({', '.join(['%s'] * len(header))});'
             cur.execute(query, value)
 
         conn.commit()
