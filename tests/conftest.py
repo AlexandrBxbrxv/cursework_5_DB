@@ -8,7 +8,7 @@ from scr.func_converters import *
 @pytest.fixture()
 def employers() -> list[dict]:
     """Возвращает сырые данные по работодателям"""
-    with open(r'..\data\employers.json', 'r', encoding='UTF-8') as f:
+    with open(r'../data/test_employers.json', 'r', encoding='UTF-8') as f:
         result = json.loads(f.read())
     return result
 
