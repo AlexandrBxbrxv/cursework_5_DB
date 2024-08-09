@@ -1,4 +1,5 @@
 from scr.db_manager import DBManager
+from scr.func_converters import *
 
 
 def test_db_manager_init(db_init):
@@ -44,3 +45,20 @@ def test_db_manager_vacancies_columns(db_init):
                              "WHERE table_name = 'vacancies' "
                              "ORDER BY ordinal_position ASC;")
     assert columns == [('employer_id',), ('vacancy_id',), ('name',), ('pay',), ('alternate_url',)]
+
+
+def test_db_manager_fill_table_employers(db_created_tables, employers):
+    """Проверяет правильность заполнения таблицы employers"""
+    db = db_created_tables
+    db.fill_table('employers', convert_employers_to_lists(employers))
+    result = db.get_from_db('SELECT * FROM employers;')
+    assert result[0] == ('1721871', 'Programming Store', 'https://hh.ru/employer/1721871', 48)
+
+
+def test_db_manager_fill_table_vacancies(db_created_tables, employers, vacancies):
+    """Проверяет правильность заполнения таблицы vacancies"""
+    db = db_created_tables
+    db.fill_table('employers', convert_employers_to_lists(employers))
+    db.fill_table('vacancies', convert_vacancies_to_lists(vacancies))
+    result = db.get_from_db('SELECT * FROM vacancies;')
+    assert result[0] == ('3518049', '104822178', 'Начинающий специалист', 15000, 'https://hh.ru/vacancy/104822178')
