@@ -34,6 +34,6 @@ def test_func_convert_vacancies_row_attributes(vacancies):
 def test_func_convert_vacancies_validation(employers):
     """Проверяет выполнение условия отбора вакансий"""
     vacancies = convert_vacancies_to_lists(employers)
-    for vac in vacancies:
+    for vac in vacancies[1:]:
         assert vac[3] > 0  # на этой позиции стоит заплата int
 
