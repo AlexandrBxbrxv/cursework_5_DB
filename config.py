@@ -1,9 +1,10 @@
 from configparser import ConfigParser
 
 
-def config_db(file_name='database.ini'):
+def config_db(file_name: str = 'database.ini') -> tuple:
     """Конфиг специально настроен для работы с классом DBManager,
-    возвращает 4 значения необходимые для инициализации"""
+    возвращает 4 значения необходимые для инициализации,
+    перед функцией ставить * для распаковки значений"""
     parser = ConfigParser()
     parser.read(file_name)
     db = {}
