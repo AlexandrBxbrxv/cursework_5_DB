@@ -29,3 +29,11 @@ def test_func_convert_vacancies_row_attributes(vacancies):
     first_row = convert_vacancies_to_lists(vacancies)[1]
     assert type(first_row) is list
     assert first_row == ['3518049', '104822178', 'Начинающий специалист', 15000, 'https://hh.ru/vacancy/104822178']
+
+
+def test_func_convert_vacancies_validation(employers):
+    """Проверяет выполнение условия отбора вакансий"""
+    vacancies = convert_vacancies_to_lists(employers)
+    for vac in vacancies:
+        assert vac[3] > 0  # на этой позиции стоит заплата int
+
