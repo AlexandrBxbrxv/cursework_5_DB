@@ -151,3 +151,8 @@ class DBManager:
         query = (f'SELECT * FROM vacancies '
                  f'WHERE pay > {self.get_avg_salary()}')
         return self.__fetch_all(query)
+
+    def get_from_db(self, query: str):
+        """Метод для тестирования,
+        возвращает результат sql запроса отправленного в аргумент метода"""
+        return self.__fetch_all(query)
