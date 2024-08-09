@@ -20,6 +20,7 @@ def vacancies() -> list[dict]:
 
 
 @pytest.fixture()
-def db_init():
-    """Возвращает данные подключения к postgresql"""
+def db_init() -> tuple:
+    """Возвращает данные подключения к postgresql,
+    перед вызовом ставить *"""
     return config_db()
