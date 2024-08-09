@@ -1,15 +1,16 @@
 from scr.db_manager import DBManager
-from scr.hh_api_employers import HHapiEmployers
 from scr.hh_api_vacancies import HHapiVacancies
 from scr.func_converters import *
+import json
 
 
 def generate_and_fill_tables(db):
     """Поучает работодателей и их вакансии, создаёт соответствующие таблицы и заполняет их"""
-    hh_emp = HHapiEmployers()
     hh_vac = HHapiVacancies()
 
-    employers = hh_emp.load_employers(10)
+    with open(r'data\employers.json', 'r', encoding='UTF-8') as f:
+        employers = json.loads(f.read())
+
     vacancies = hh_vac.load_vacancies(employers)
 
     db.create_table_employers()

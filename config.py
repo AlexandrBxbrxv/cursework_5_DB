@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 
 
-def config_db(file_name: str = r'C:\Users\Alexsandr\PycharmProjects\new_coursework_5_DB\database.ini') -> tuple:
+def config_db(file_name: str = r'..\database.ini') -> tuple:
     """Конфиг специально настроен для работы с классом DBManager,
     возвращает 4 значения необходимые для инициализации,
     перед функцией ставить * для распаковки значений"""
